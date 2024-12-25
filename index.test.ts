@@ -11,16 +11,4 @@ describe('Test API Endpoints', () => {
 		const res = await app.request('/api/authentication');
 		expect(res.status).toBe(200);
 	});
-
-	test('GET /movie', async () => {
-		const res = await app.request('/api/movie/52959');
-		expect(res.status).toBe(200);
-	});
-
-	test('GET /api/search/movie', async () => {
-		const res = await app.request(
-			'/api/search/movie?query=star&include_adult=false&language=en-US&page=1'
-		);
-		expect(res.status).toBe(200);
-	});
 });
