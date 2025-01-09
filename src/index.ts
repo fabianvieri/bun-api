@@ -1,4 +1,3 @@
-import ky from 'ky';
 import { Hono } from 'hono';
 import { cors } from 'hono/cors';
 import { logger } from 'hono/logger';
@@ -6,6 +5,8 @@ import { secureHeaders } from 'hono/secure-headers';
 import { rateLimiter } from 'hono-rate-limiter';
 import { RedisStore } from '@hono-rate-limiter/redis';
 import { Redis } from '@upstash/redis';
+
+import movieRoutes from './api/tmdb';
 
 export const app = new Hono();
 
@@ -29,31 +30,7 @@ app.use(logger());
 app.use(secureHeaders());
 
 app.get('/', (c) => c.text('Server is running...'));
-app.get('/api/*', async (c) => {
-	try {
-		const endpoint = c.req.path.replace('/api', '/3');
-		const queries = c.req.queries();
-		const params = new URLSearchParams(
-			Object.entries(queries).map(([key, value]) => [key, value[0]])
-		);
-
-		const url = new URL(endpoint, process.env.API_BASE_URL);
-		const response = await ky
-			.get(url.toString(), {
-				retry: 2,
-				headers: {
-					Authorization: `Bearer ${process.env.API_TOKEN}`,
-				},
-				searchParams: params,
-			})
-			.json();
-
-		return c.json({ ok: true, data: response }, 200);
-	} catch (error) {
-		console.error(error);
-		return c.json({ ok: false, message: 'Internal server error' }, 500);
-	}
-});
+app.route('/api/tmdb/*', movieRoutes);
 
 Bun.serve({
 	fetch: app.fetch,

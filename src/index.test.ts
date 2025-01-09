@@ -1,5 +1,5 @@
 import { expect, test, describe } from 'bun:test';
-import { app } from './index';
+import { app } from '.';
 
 describe('Test API Endpoints', () => {
 	test('GET /', async () => {
@@ -8,7 +8,7 @@ describe('Test API Endpoints', () => {
 	});
 
 	test('GET /authentication', async () => {
-		const res = await app.request('/api/authentication');
+		const res = await app.request('/api/tmdb/authentication');
 		expect(res.status).toBe(200);
 	});
 });
