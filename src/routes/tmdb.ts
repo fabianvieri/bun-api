@@ -1,22 +1,24 @@
-import { Hono } from 'hono';
 import ky from 'ky';
+import { Hono } from 'hono';
 
-const movie = new Hono();
+import { env } from '../env';
 
-movie.get('/', async (c) => {
+const tmdb = new Hono();
+
+tmdb.get('/', async (c) => {
 	try {
-		const endpoint = c.req.path.replace('/api/tmdb', '/3');
+		const endpoint = c.req.path.replace('/tmdb', '/3');
 		const queries = c.req.queries();
 		const params = new URLSearchParams(
 			Object.entries(queries).map(([key, value]) => [key, value[0]])
 		);
 
-		const url = new URL(endpoint, process.env.API_BASE_URL);
+		const url = new URL(endpoint, env.API_BASE_URL);
 		const response = await ky
 			.get(url.toString(), {
 				retry: 2,
 				headers: {
-					Authorization: `Bearer ${process.env.API_TOKEN}`,
+					Authorization: `Bearer ${env.API_TOKEN}`,
 				},
 				searchParams: params,
 			})
@@ -29,4 +31,4 @@ movie.get('/', async (c) => {
 	}
 });
 
-export default movie;
+export default tmdb;

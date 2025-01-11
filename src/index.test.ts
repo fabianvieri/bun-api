@@ -7,8 +7,8 @@ describe('Test API Endpoints', () => {
 		expect(res.status).toBe(200);
 	});
 
-	test('GET /authentication', async () => {
-		const res = await app.request('/api/tmdb/authentication');
+	test('GET /tmdb/authentication', async () => {
+		const res = await app.request('/tmdb/authentication');
 		expect(res.status).toBe(200);
 	});
 });
