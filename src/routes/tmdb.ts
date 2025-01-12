@@ -24,10 +24,10 @@ tmdb.get('/', async (c) => {
 			})
 			.json();
 
-		return c.json({ ok: true, data: response }, 200);
+		return c.json({ success: true, data: response }, 200);
 	} catch (error) {
 		console.error(error);
-		return c.json({ ok: false, message: 'Internal server error' }, 500);
+		return c.json({ success: false, message: 'Internal server error' }, 500);
 	}
 });
 

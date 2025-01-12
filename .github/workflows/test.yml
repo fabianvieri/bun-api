@@ -13,6 +13,7 @@ env:
   UPSTASH_REDIS_REST_TOKEN: ${{secrets.UPSTASH_REDIS_REST_TOKEN}}
   DATABASE_URL: ${{secrets.DATABASE_URL}}
   SECRET: ${{secrets.SECRET}}
+  CORS_ORIGIN: ${{secrets.CORS_ORIGIN}}
 
 jobs:
   test:

@@ -7,6 +7,7 @@ const envSchema = z.object({
 	UPSTASH_REDIS_REST_TOKEN: z.string().min(1),
 	DATABASE_URL: z.string().min(1),
 	SECRET: z.string().min(1),
+	CORS_ORIGIN: z.string().url(),
 });
 
 export const env = envSchema.parse(process.env);
