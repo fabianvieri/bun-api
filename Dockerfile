@@ -18,7 +18,7 @@ RUN bun run build
 
 FROM base
 
-COPY --from=build /app/dist /app/.env /app/
+COPY --from=build /app/dist /app/
 
 EXPOSE 3000
 
