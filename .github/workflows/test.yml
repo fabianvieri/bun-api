@@ -2,9 +2,12 @@ name: Test Rest API
 
 on:
   push:
-    branches: [main]
+    branches:
+      - main
+
   pull_request:
-    branches: [main]
+    branches:
+      - main
 
 env:
   API_BASE_URL: ${{secrets.API_BASE_URL}}
@@ -17,8 +20,8 @@ env:
 
 jobs:
   test:
+    name: Testing API
     runs-on: ubuntu-latest
-
     steps:
       - uses: actions/checkout@v4
       - uses: oven-sh/setup-bun@v2

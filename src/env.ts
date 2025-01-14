@@ -8,6 +8,7 @@ const envSchema = z.object({
 	DATABASE_URL: z.string().min(1),
 	SECRET: z.string().min(1),
 	CORS_ORIGIN: z.string().url(),
+	PORT: z.string().regex(/^\d+$/).default('3000').transform(Number),
 });
 
 export const env = envSchema.parse(process.env);

@@ -9,8 +9,8 @@ import { Redis } from '@upstash/redis';
 
 import { env } from './env';
 import tmdbRoutes from './routes/tmdb';
-import movieApiRoutes from './routes/movie';
 import authRoutes from './routes/auth';
+import movieApiRoutes from './routes/movie';
 
 export const app = new Hono();
 
@@ -41,5 +41,5 @@ app.route('/api/movie', movieApiRoutes);
 
 Bun.serve({
 	fetch: app.fetch,
-	port: process.env.PORT || 8000,
+	port: env.PORT,
 });
