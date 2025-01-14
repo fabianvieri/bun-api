@@ -5,20 +5,27 @@ on:
       - main
 
 env:
-  API_BASE_URL: ${{secrets.API_BASE_URL}}
+  SECRET: ${{secrets.SECRET}}
   API_TOKEN: ${{secrets.API_TOKEN}}
+  CORS_ORIGIN: ${{secrets.CORS_ORIGIN}}
+  API_BASE_URL: ${{secrets.API_BASE_URL}}
+  DATABASE_URL: ${{secrets.DATABASE_URL}}
   UPSTASH_REDIS_REST_URL: ${{secrets.UPSTASH_REDIS_REST_URL}}
   UPSTASH_REDIS_REST_TOKEN: ${{secrets.UPSTASH_REDIS_REST_TOKEN}}
-  DATABASE_URL: ${{secrets.DATABASE_URL}}
-  SECRET: ${{secrets.SECRET}}
-  CORS_ORIGIN: ${{secrets.CORS_ORIGIN}}
 
 jobs:
   test:
     name: Testing API
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: oven-sh/setup-bun@v2
-      - run: bun install --ci
-      - run: bun test
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Bun
+        uses: oven-sh/setup-bun@v2
+
+      - name: Install dependencies
+        run: bun install --ci
+
+      - name: Run tests
+        run: bun test
