@@ -1,4 +1,3 @@
-import { z } from 'zod';
 import { eq } from 'drizzle-orm';
 import { Hono } from 'hono';
 import { sign } from 'hono/jwt';
@@ -8,13 +7,11 @@ import { zValidator } from '@hono/zod-validator';
 import { db } from '../db';
 import { env } from '../env';
 import { users as userTable } from '../db/schema';
+import { loginSchema, signupSchema } from '../validations/schema';
 
 const auth = new Hono();
 
-const loginSchema = z.object({
-	email: z.string().email(),
-	password: z.string().min(8),
-});
+const COOKIE_MAX_AGE = 24 * 60 * 60;
 
 auth.post('/login', zValidator('json', loginSchema), async (c) => {
 	const { email, password } = c.req.valid('json');
@@ -40,7 +37,7 @@ auth.post('/login', zValidator('json', loginSchema), async (c) => {
 		const token = await sign(
 			{
 				session: user.id,
-				exp: Math.floor(Date.now() / 1000) + 24 * 60 * 60,
+				exp: Math.floor(Date.now() / 1000) + COOKIE_MAX_AGE,
 			},
 			env.SECRET
 		);
@@ -49,7 +46,7 @@ auth.post('/login', zValidator('json', loginSchema), async (c) => {
 			path: '/',
 			secure: true,
 			httpOnly: true,
-			maxAge: 24 * 60 * 60,
+			maxAge: COOKIE_MAX_AGE,
 			sameSite: 'Lax',
 		});
 
@@ -59,17 +56,6 @@ auth.post('/login', zValidator('json', loginSchema), async (c) => {
 		return c.json({ success: false, message: 'Internal server error' }, 500);
 	}
 });
-
-const signupSchema = z
-	.object({
-		username: z.string().min(1),
-		email: z.string().email(),
-		password: z.string().min(8),
-		confirmPassword: z.string().min(8),
-	})
-	.refine((value) => value.confirmPassword === value.password, {
-		message: 'Password does not mathch',
-	});
 
 auth.post('/signup', zValidator('json', signupSchema), async (c) => {
 	const { password, username, email } = c.req.valid('json');

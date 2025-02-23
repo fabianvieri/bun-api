@@ -29,7 +29,7 @@ const limiter = rateLimiter({
 });
 
 app.use(limiter);
-app.use('/api/*', cors({ origin: env.CORS_ORIGIN }));
+app.use(cors());
 app.use(logger());
 app.use(secureHeaders());
 app.use(timeout(10000));

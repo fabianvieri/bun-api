@@ -14,6 +14,7 @@ tmdb.get('/', async (c) => {
 		);
 
 		const url = new URL(endpoint, env.API_BASE_URL);
+
 		const response = await ky
 			.get(url.toString(), {
 				retry: 2,
